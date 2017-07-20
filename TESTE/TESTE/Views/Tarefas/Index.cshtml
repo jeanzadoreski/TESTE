@@ -1,0 +1,87 @@
+﻿@model IEnumerable<TESTE.Models.Tarefa>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "TESTE - Listagem de TAREFAS";
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Relação de Tarefas registradas
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TarefaId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Titulo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Descricao)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TarefaId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Titulo)
+                        </td>
+                        <td>
+                            @switch (item.Status)
+                            {
+                                case 0:
+                                    @Html.Label("Concluído")
+                                    break;
+                                default:
+                                    @Html.Label("Pendente")
+                                    break;
+                            }                           
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descricao)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Alterar","Edit", new {id = item.TarefaId }) |
+                            @Html.ActionLink("Detalhes","Details", new {id = item.TarefaId }) |
+                            @Html.ActionLink("Eliminar","Delete", new {id = item.TarefaId })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer panel-info">
+        @Html.ActionLink("Registrar uma nova TAREFA","Create", null, new{ @class = "btn btn-success" })
+</div>
+</div>
+@section styles{
+    <link href="@Url.Content("~/content/DataTables/css/dataTables.bootstrap.css")" rel="stylesheet"/>
+}
+@section ScriptPage {
+    <script src=" @Url.Content("~/scripts/DataTables/jquery.dataTables.js")" ></script>
+     <script src="@Url.Content("~/scripts/DataTables/dataTables.bootstrap.js")"></script>
+     <script type="text/javascript">
+        $(document).ready(function () {
+            $('.table').dataTable(dataTable({ "order": [[1, "asc"]] });
+        });
+    </script>
+}
